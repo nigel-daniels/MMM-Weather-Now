@@ -23,6 +23,7 @@ Module.register('MMM-Weather-Now', {
             }
 
         // Set up the local values, here we construct the request url to use
+        this.units = config.units;
         this.loaded = false;
         this.url = 'http://api.wunderground.com/api/' + this.config.api_key + '/conditions/q/' + this.config.state + '/' + this.config.city +'.json';
         this.nowIcon = '';
@@ -75,7 +76,11 @@ Module.register('MMM-Weather-Now', {
 
             nowTemp = document.createElement('div');
             nowTemp.className = 'nowTemp';
-            nowTemp.innerHTML = 'Feels like ' + this.nowTempC + '&deg; C (' + this.nowTempF + '&deg; F)';
+            if (this.units === 'imperial') {
+                nowTemp.innerHTML = 'Feels like ' + this.nowTempF + '&deg; F (' + this.nowTempC + '&deg; C)';
+            } else {
+                nowTemp.innerHTML = 'Feels like ' + this.nowTempC + '&deg; C (' + this.nowTempF + '&deg; F)';
+                }
 
             // Add elements to the nowDetail div
             nowDetail.appendChild(nowTitle);
