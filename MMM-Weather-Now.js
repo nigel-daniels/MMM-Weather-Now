@@ -24,8 +24,7 @@ Module.register('MMM-Weather-Now', {
 
         // Set up the local values, here we construct the request url to use
         this.loaded = false;
-        this.nowURL = 'http://api.wunderground.com/api/' + this.config.api_key + '/conditions/q/' + this.config.state + '/' + this.config.city +'.json';
-        this.forecastURL = 'http://api.wunderground.com/api/' + this.config.api_key + '/forecast/q/' + this.config.state + '/' + this.config.city +'.json';
+        this.url = 'http://api.wunderground.com/api/' + this.config.api_key + '/conditions/q/' + this.config.state + '/' + this.config.city +'.json';
         this.nowIcon = '';
         this.nowWeather = '';
         this.nowTempC = '';
@@ -43,7 +42,7 @@ Module.register('MMM-Weather-Now', {
 
     getWeatherData: function(that) {
         // Make the initial request to the helper then set up the timer to perform the updates
-        that.sendSocketNotification('GET-WEATHER-NOW', 'url': that.nowURL);
+        that.sendSocketNotification('GET-WEATHER-NOW', that.url);
         setTimeout(that.getWeatherData, that.config.interval, that);
         },
 
@@ -55,13 +54,9 @@ Module.register('MMM-Weather-Now', {
         // If we have some data to display then build the results table
         if (this.loaded) {
             wrapper = document.createElement('div');
-		    wrapper.className = 'weather small';
+		    wrapper.className = 'now small';
 
-            // Set up the first div with the now weather data
-            nowDiv = document.createElement('div');
-            nowDiv.className = 'now';
-
-            // Elements to add to the now div
+            // Elements to add to the wrapper
             nowIcon = document.createElement('img');
             nowIcon.className = 'nowIcon';
             nowIcon.src = './modules/MMM-3Day-Forecast/images/' + this.nowIcon + '.gif';
@@ -88,11 +83,8 @@ Module.register('MMM-Weather-Now', {
             nowDetail.appendChild(nowTemp);
 
             // Add elements to the now div
-            nowDiv.appendChild(nowIcon);
-            nowDiv.appendChild(nowDetail);
-
-            // Add the rows to the table
-            wrapper.appendChild(nowDiv);
+            wrapper.appendChild(nowIcon);
+            wrapper.appendChild(nowDetail);
         } else {
             // Otherwise lets just use a simple div
             wrapper = document.createElement('div');
@@ -106,7 +98,6 @@ Module.register('MMM-Weather-Now', {
     socketNotificationReceived: function(notification, payload) {
         // check to see if the response was for us and used the same url
         if (notification === 'GOT-WEATHER-NOW' && payload.url === this.nowURL) {
-                console.log('Payload: ' + JSON.stringify(payload));
                 // we got some data so set the flag, stash the data to display then request the dom update
                 this.loaded = true;
                 this.nowIcon = payload.nowIcon;
