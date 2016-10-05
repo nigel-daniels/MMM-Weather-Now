@@ -24,23 +24,3 @@
 .nowText:first-letter {
     text-transform: uppercase !important;
 }
-
-.forecast {
-    display: flex;
-    text-align: center;
-}
-
-.forcastDay {
-    width: 110px;
-    margin-left: 5px;
-    margin-right: 5px;
-}
-
-.forcastDay img {
-    margin-right: 5px;
-}
-
-.forecastDetail {
-    text-align: left;
-    font-size: 14px;
-}
