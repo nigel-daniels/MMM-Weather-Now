@@ -66,7 +66,7 @@ Module.register('MMM-Weather-Now', {
 
             // Elements to add to the nowDetail
             nowTitle = document.createElement('div');
-            nowTitle.className = 'nowTitle';
+            nowTitle.className = 'nowTitle normal';
             nowTitle.innerHTML = 'Now';
 
             nowText = document.createElement('div');
