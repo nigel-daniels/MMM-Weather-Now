@@ -24,8 +24,9 @@ module.exports = NodeHelper.create({
     getWeatherData: function(payload) {
 
         var that = this;
+        this.url = payload;
 
-        request({url: payload, method: 'GET'}, function(error, response, body) {
+        request({url: this.url, method: 'GET'}, function(error, response, body) {
             // Lets convert the body into JSON
             var result = JSON.parse(body);
 
@@ -44,8 +45,8 @@ module.exports = NodeHelper.create({
                 that.nowTempF = '--';
                 }
 
-                // We have the response figured out so lets fire off the notifiction
-                this.sendSocketNotification('GOT-WEATHER-NOW', {'url': payload, 'nowIcon': this.nowIcon, 'nowWeather': this.nowWeather, 'nowTempC': this.nowTempC, 'nowTempF': this.nowTempF});
+            // We have the response figured out so lets fire off the notifiction
+            that.sendSocketNotification('GOT-WEATHER-NOW', {'url': that.url, 'nowIcon': that.nowIcon, 'nowWeather': that.nowWeather, 'nowTempC': that.nowTempC, 'nowTempF': that.nowTempF});
             });
         },
 

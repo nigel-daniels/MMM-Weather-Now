@@ -97,7 +97,7 @@ Module.register('MMM-Weather-Now', {
 
     socketNotificationReceived: function(notification, payload) {
         // check to see if the response was for us and used the same url
-        if (notification === 'GOT-WEATHER-NOW' && payload.url === this.nowURL) {
+        if (notification === 'GOT-WEATHER-NOW' && payload.url === this.url) {
                 // we got some data so set the flag, stash the data to display then request the dom update
                 this.loaded = true;
                 this.nowIcon = payload.nowIcon;
