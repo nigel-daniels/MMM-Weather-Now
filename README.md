@@ -22,9 +22,9 @@ Here is an example of an entry in `config.js`
     position:	'top_left',
     classes:	'dimmed medium',
     config:		{
-                key:	  'xxxxxxxxxxxx',
-                state:	'UK',
-                city:   'Winchester'
+                api_key: 'xxxxxxxxxxxx',
+                state:	 'UK',
+                city:    'Winchester'
                 }
 },
 ```

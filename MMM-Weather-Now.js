@@ -41,6 +41,13 @@ Module.register('MMM-Weather-Now', {
         },
 
 
+    getTranslations: function() {
+        return  {
+                en: 'translations/en.json'
+                };
+        },
+
+
     getWeatherData: function(that) {
         // Make the initial request to the helper then set up the timer to perform the updates
         that.sendSocketNotification('GET-WEATHER-NOW', that.url);
@@ -68,7 +75,7 @@ Module.register('MMM-Weather-Now', {
             // Elements to add to the nowDetail
             nowTitle = document.createElement('div');
             nowTitle.className = 'nowTitle normal';
-            nowTitle.innerHTML = 'Now';
+            nowTitle.innerHTML = this.translate('NOW');
 
             nowText = document.createElement('div');
             nowText.className = 'nowText';
@@ -77,9 +84,9 @@ Module.register('MMM-Weather-Now', {
             nowTemp = document.createElement('div');
             nowTemp.className = 'nowTemp';
             if (this.units === 'imperial') {
-                nowTemp.innerHTML = 'Feels like ' + this.nowTempF + '&deg; F (' + this.nowTempC + '&deg; C)';
+                nowTemp.innerHTML = this.translate('FEELS_LIKE') + ' ' + this.nowTempF + '&deg; F (' + this.nowTempC + '&deg; C)';
             } else {
-                nowTemp.innerHTML = 'Feels like ' + this.nowTempC + '&deg; C (' + this.nowTempF + '&deg; F)';
+                nowTemp.innerHTML = this.translate('FEELS_LIKE') + ' ' + this.nowTempC + '&deg; C (' + this.nowTempF + '&deg; F)';
                 }
 
             // Add elements to the nowDetail div
@@ -93,7 +100,7 @@ Module.register('MMM-Weather-Now', {
         } else {
             // Otherwise lets just use a simple div
             wrapper = document.createElement('div');
-            wrapper.innerHTML = 'Loading weather data...';
+            wrapper.innerHTML = this.translate('LOADING');
             }
 
         return wrapper;
