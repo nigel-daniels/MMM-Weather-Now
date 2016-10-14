@@ -20,7 +20,6 @@ Here is an example of an entry in `config.js`
 {
     module:		'MMM-Weather-Now',
     position:	'top_left',
-    classes:	'dimmed medium',
     config:		{
                 api_key: 'xxxxxxxxxxxx',
                 state:	 'UK',
