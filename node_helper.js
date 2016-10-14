@@ -33,7 +33,9 @@ module.exports = NodeHelper.create({
             // Check to see if we are error free and got an OK response
             if (!error && response.statusCode == 200) {
                 // Let's get the weather data for right now
-                that.nowIcon = result.current_observation.icon;
+                var icon_url = result.current_observation.icon_url;
+
+                that.nowIcon = icon_url.substring(icon_url.lastIndexOf('/') + 1, icon_url.lastIndexOf('.'));
                 that.nowWeather = result.current_observation.weather;
                 that.nowTempC = result.current_observation.feelslike_c;
                 that.nowTempF = result.current_observation.feelslike_f;
