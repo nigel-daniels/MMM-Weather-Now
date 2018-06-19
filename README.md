@@ -1,5 +1,7 @@
 # MMM-Weather-Now
-This a module for the [MagicMirror](https://github.com/MichMich/MagicMirror/tree/develop).  This module shows weather conditions now using the Wunderground API.
+![Weather now](weathernow.png "Weather now.")
+
+This a module for the [MagicMirror](https://github.com/MichMich/MagicMirror/tree/develop).  This module shows weather conditions now using the Wunderground API.  This is designed to compliment the [MMM-3Day-Forecast](https://github.com/nigel-daniels/MMM-3Day-Forecast) module.
 
 ## Installation
 1. Navigate into your MagicMirror's `modules` folder and execute `git clone https://github.com/nigel-daniels/MMM-Weather-Now`.  A new folder `MMM-Weather-Now` will appear, navigate into it.
