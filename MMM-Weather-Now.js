@@ -9,8 +9,10 @@ Module.register('MMM-Weather-Now', {
 
     defaults: {
             api_key:    '',
-            state:      'CA', // Supported states can be found here https://www.wunderground.com/weather/api/d/docs?d=resources/country-to-iso-matching
-            city:       'San_Jose',
+            lat:		0.0,
+            lon:		0.0,
+			units:		'M',
+			lang:		'en',
             interval:   900000 // Every 15 mins
         },
 
@@ -23,13 +25,12 @@ Module.register('MMM-Weather-Now', {
             }
 
         // Set up the local values, here we construct the request url to use
-        this.units = config.units;
+        this.units = this.config.units;
         this.loaded = false;
-        this.url = 'http://api.wunderground.com/api/' + this.config.api_key + '/conditions/q/' + this.config.state + '/' + this.config.city +'.json';
+        this.url = 'https://api.weatherbit.io/v2.0/current?key=' + this.config.api_key + '&lat=' + this.config.lat + '&lon=' + this.config.lon + '&units=' + this.config.units + '&lang=' + this.config.lang;
         this.nowIcon = '';
         this.nowWeather = '';
-        this.nowTempC = '';
-        this.nowTempF = '';
+        this.nowTemp = '';
 
         // Trigger the first request
         this.getWeatherData(this);
@@ -43,21 +44,33 @@ Module.register('MMM-Weather-Now', {
 
     getTranslations: function() {
         return  {
-                en: 'translations/en.json'
+                en: 'translations/en.json',
+				da: 'translations/da.json'
                 };
         },
 
 
-    getWeatherData: function(that) {
+    getWeatherData: function(_this) {
         // Make the initial request to the helper then set up the timer to perform the updates
-        that.sendSocketNotification('GET-WEATHER-NOW', that.url);
-        setTimeout(that.getWeatherData, that.config.interval, that);
+        _this.sendSocketNotification('GET-WEATHER-NOW', _this.url);
+        setTimeout(_this.getWeatherData, _this.config.interval, _this);
         },
 
 
     getDom: function() {
         // Set up the local wrapper
         var wrapper = null;
+		var C = '--';
+		var F = '--';
+		if (this.nowTemp !== '--') {
+			if (this.units = 'M') {
+				C = this.nowTemp;
+				F = Math.round( (((C*9)/5)+32) * 10 ) / 10;
+			} else {
+				F = this.nowTemp;
+				C = Math.round( (((F-32)*5)/9) * 10 ) / 10;
+				}
+			}
 
         // If we have some data to display then build the results table
         if (this.loaded) {
@@ -65,38 +78,38 @@ Module.register('MMM-Weather-Now', {
 		    wrapper.className = 'now small';
 
             // Elements to add to the wrapper
-            nowIcon = document.createElement('img');
-            nowIcon.className = 'nowIcon';
-            nowIcon.src = './modules/MMM-3Day-Forecast/images/' + this.nowIcon + '.gif';
+            nowIconImg = document.createElement('img');
+            nowIconImg.className = 'nowIcon';
+            nowIconImg.src = './modules/MMM-Weather-Now/images/' + this.nowIcon + '.gif';
 
-            nowDetail = document.createElement('div');
-            nowDetail.className = 'nowDetail';
+            nowDetailDiv = document.createElement('div');
+            nowDetailDiv.className = 'nowDetail';
 
             // Elements to add to the nowDetail
-            nowTitle = document.createElement('div');
-            nowTitle.className = 'nowTitle normal';
-            nowTitle.innerHTML = this.translate('NOW');
+            nowTitleDiv = document.createElement('div');
+            nowTitleDiv.className = 'nowTitle normal';
+            nowTitleDiv.innerHTML = this.translate('NOW');
 
-            nowText = document.createElement('div');
-            nowText.className = 'nowText';
-            nowText.innerHTML = this.nowWeather;
+            nowTextDiv = document.createElement('div');
+            nowTextDiv.className = 'nowText';
+            nowTextDiv.innerHTML = this.nowWeather;
 
-            nowTemp = document.createElement('div');
-            nowTemp.className = 'nowTemp';
-            if (this.units === 'imperial') {
-                nowTemp.innerHTML = this.translate('FEELS_LIKE') + ' ' + this.nowTempF + '&deg; F (' + this.nowTempC + '&deg; C)';
+            nowTempDiv = document.createElement('div');
+            nowTempDiv.className = 'nowTemp';
+            if (this.units === 'M') {
+				nowTempDiv.innerHTML = this.translate('FEELS_LIKE') + ' ' + C + '&deg; C (' + F + '&deg; F)';
             } else {
-                nowTemp.innerHTML = this.translate('FEELS_LIKE') + ' ' + this.nowTempC + '&deg; C (' + this.nowTempF + '&deg; F)';
+                nowTempDiv.innerHTML = this.translate('FEELS_LIKE') + ' ' + F + '&deg; F (' + C + '&deg; C)';
                 }
 
             // Add elements to the nowDetail div
-            nowDetail.appendChild(nowTitle);
-            nowDetail.appendChild(nowText);
-            nowDetail.appendChild(nowTemp);
+            nowDetailDiv.appendChild(nowTitleDiv);
+            nowDetailDiv.appendChild(nowTextDiv);
+            nowDetailDiv.appendChild(nowTempDiv);
 
             // Add elements to the now div
-            wrapper.appendChild(nowIcon);
-            wrapper.appendChild(nowDetail);
+            wrapper.appendChild(nowIconImg);
+            wrapper.appendChild(nowDetailDiv);
         } else {
             // Otherwise lets just use a simple div
             wrapper = document.createElement('div');
@@ -114,8 +127,7 @@ Module.register('MMM-Weather-Now', {
                 this.loaded = true;
                 this.nowIcon = payload.nowIcon;
                 this.nowWeather = payload.nowWeather;
-                this.nowTempC = payload.nowTempC;
-                this.nowTempF = payload.nowTempF;
+                this.nowTemp = payload.nowTemp;
                 this.updateDom(1000);
             }
         }
