@@ -21,8 +21,8 @@ Module.register('MMM-Weather-Now', {
         Log.log('Starting module: ' + this.name);
 
         if (this.data.classes === 'MMM-Weather-Now') {
-            this.data.classes = 'bright medium';
-            }
+            this.data.classes = 'MMM-Weather-Now bright medium';
+        }
 
         // Set up the local values, here we construct the request url to use
         this.units = this.config.units;
