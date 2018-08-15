@@ -16,8 +16,9 @@ The entry in `config.js` can include the following options:
 |`api_key`|**Required** This is the API key you need to use to request weather data from the Weather Underground site.  Details on how to request an API key can be found [here](https://www.weatherbit.io/account/create)<br><br>**Type:** `string`<br>**Default value:** `null`|
 |`lat`|This is the latitude of the location you want to get the weather for.<br><br>**Type:** `number`<br>**Default value:** `0.0`|
 |`lon`|This is the longitude of the location you want to get the weather for.<br><br>**Type:** `number`<br>**Default value:** `0.0`|
-|`units`|This is the units you want the weather reporting in.<br>**Type** `string` Use `M` for metric OR `I` for imperial.<br>**Default value:** `M`|
+|`units`|This is the units you want the weather reporting in.<br><br>**Type** `string` Use `M` for metric OR `I` for imperial.<br>**Default value:** `M`|
 |`lang`|This is the two character country code for the language you want the weather in, see all the supported codes [here](https://www.weatherbit.io/api/weather-current).\*<br><br>**Type** `string`<br>**Default value** `en`|
+|`tableView`|This switches the look to use a more compact table based view.<br><br>**Type** `boolean`<br>**Default value** `false`|
 |`interval`|How often the weather is updated.<br><br>**Type:** `integer`<br>**Default value:** `900000 // 15 minutes`|
 
 \* This module itself only currently supports `da`, `en` and `nb` for the text 'Now' and 'Feels like'.  If you have translations for these please send them over and I'll add your language to the set I can support :)

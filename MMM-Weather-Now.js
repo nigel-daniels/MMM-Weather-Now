@@ -13,7 +13,8 @@ Module.register('MMM-Weather-Now', {
             lon:		0.0,
 			units:		'M',
 			lang:		'en',
-            interval:   900000 // Every 15 mins
+            interval:   900000, // Every 15 mins
+			tableView:	false
         },
 
 
@@ -21,7 +22,7 @@ Module.register('MMM-Weather-Now', {
         Log.log('Starting module: ' + this.name);
 
         if (this.data.classes === 'MMM-Weather-Now') {
-            this.data.classes = 'bright medium';
+            this.data.classes = 'medium';
             }
 
         // Set up the local values, here we construct the request url to use
@@ -31,6 +32,7 @@ Module.register('MMM-Weather-Now', {
         this.nowIcon = '';
         this.nowWeather = '';
         this.nowTemp = '';
+		this.tableView = this.config.tableView;
 
         // Trigger the first request
         this.getWeatherData(this);
@@ -75,42 +77,95 @@ Module.register('MMM-Weather-Now', {
 
         // If we have some data to display then build the results table
         if (this.loaded) {
-            wrapper = document.createElement('div');
-		    wrapper.className = 'now small';
+			if (this.tableView) {
+				wrapper = document.createElement('table');
+				wrapper.className = 'small';
 
-            // Elements to add to the wrapper
-            nowIconImg = document.createElement('img');
-            nowIconImg.className = 'nowIcon';
-            nowIconImg.src = './modules/MMM-Weather-Now/images/' + this.nowIcon + '.gif';
+				row1 = document.createElement('tr');
 
-            nowDetailDiv = document.createElement('div');
-            nowDetailDiv.className = 'nowDetail';
+				nowIconCell = document.createElement('td');
+				nowIconCell.className = 'nowIcon2';
+				nowIconCell.setAttribute('rowspan', '2');
 
-            // Elements to add to the nowDetail
-            nowTitleDiv = document.createElement('div');
-            nowTitleDiv.className = 'nowTitle normal';
-            nowTitleDiv.innerHTML = this.translate('NOW');
+				nowIconImg = document.createElement('img');
+				nowIconImg.src = './modules/MMM-Weather-Now/images/' + this.nowIcon + '.gif';
 
-            nowTextDiv = document.createElement('div');
-            nowTextDiv.className = 'nowText';
-            nowTextDiv.innerHTML = this.nowWeather;
+				nowTitleCell = document.createElement('td');
+				nowTitleCell.className = 'nowTitle2 bright';
+				nowTitleCell.innerHTML = this.translate('NOW');
 
-            nowTempDiv = document.createElement('div');
-            nowTempDiv.className = 'nowTemp';
-            if (this.units === 'M') {
-				nowTempDiv.innerHTML = this.translate('FEELS_LIKE') + ' ' + C + '&deg; C (' + F + '&deg; F)';
-            } else {
-                nowTempDiv.innerHTML = this.translate('FEELS_LIKE') + ' ' + F + '&deg; F (' + C + '&deg; C)';
-                }
+				row2 = document.createElement('tr');
 
-            // Add elements to the nowDetail div
-            nowDetailDiv.appendChild(nowTitleDiv);
-            nowDetailDiv.appendChild(nowTextDiv);
-            nowDetailDiv.appendChild(nowTempDiv);
+				nowTempTextCell = document.createElement('td');
+				nowTempTextCell.className = 'nowTempText2';
+				nowTempTextCell.innerHTML = this.translate('FEELS_LIKE');
 
-            // Add elements to the now div
-            wrapper.appendChild(nowIconImg);
-            wrapper.appendChild(nowDetailDiv);
+				row3 = document.createElement('tr');
+
+				nowTextCell = document.createElement('td');
+				nowTextCell.className = 'nowText2';
+				nowTextCell.innerHTML = this.nowWeather;
+
+				nowTempDegCell = document.createElement('td');
+				nowTempDegCell.className = 'nowTempDeg2';
+
+				if (this.units === 'M') {
+					nowTempDegCell.innerHTML = C + '&deg; C';
+				} else {
+					nowTempDegCell.innerHTML = F + '&deg; F';
+					}
+
+				nowIconCell.appendChild(nowIconImg);
+
+				row1.appendChild(nowIconCell);
+				row1.appendChild(nowTitleCell);
+
+				row2.appendChild(nowTempTextCell);
+
+				row3.appendChild(nowTextCell);
+				row3.appendChild(nowTempDegCell);
+
+				wrapper.appendChild(row1);
+				wrapper.appendChild(row2);
+				wrapper.appendChild(row3);
+			} else {
+				wrapper = document.createElement('div');
+			    wrapper.className = 'now small';
+
+	            // Elements to add to the wrapper
+	            nowIconImg = document.createElement('img');
+	            nowIconImg.className = 'nowIcon';
+	            nowIconImg.src = './modules/MMM-Weather-Now/images/' + this.nowIcon + '.gif';
+
+	            nowDetailDiv = document.createElement('div');
+	            nowDetailDiv.className = 'nowDetail';
+
+	            // Elements to add to the nowDetail
+	            nowTitleDiv = document.createElement('div');
+	            nowTitleDiv.className = 'nowTitle';
+	            nowTitleDiv.innerHTML = this.translate('NOW');
+
+	            nowTextDiv = document.createElement('div');
+	            nowTextDiv.className = 'nowText bright';
+	            nowTextDiv.innerHTML = this.nowWeather;
+
+	            nowTempDiv = document.createElement('div');
+	            nowTempDiv.className = 'nowTemp bright';
+	            if (this.units === 'M') {
+					nowTempDiv.innerHTML = this.translate('FEELS_LIKE') + ' ' + C + '&deg; C (' + F + '&deg; F)';
+	            } else {
+	                nowTempDiv.innerHTML = this.translate('FEELS_LIKE') + ' ' + F + '&deg; F (' + C + '&deg; C)';
+	                }
+
+	            // Add elements to the nowDetail div
+	            nowDetailDiv.appendChild(nowTitleDiv);
+	            nowDetailDiv.appendChild(nowTextDiv);
+	            nowDetailDiv.appendChild(nowTempDiv);
+
+	            // Add elements to the now div
+	            wrapper.appendChild(nowIconImg);
+	            wrapper.appendChild(nowDetailDiv);
+			}
         } else {
             // Otherwise lets just use a simple div
             wrapper = document.createElement('div');
