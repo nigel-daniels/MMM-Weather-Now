@@ -1,5 +1,5 @@
 # MMM-Weather-Now
-![Weather now](weathernow.png "Weather now.")
+![Weather now](weathernow.png "Weather now.") OR ![Weather now](weather2.png "Weather now.")
 
 This a module for the [MagicMirror](https://github.com/MichMich/MagicMirror/tree/develop).  This module shows weather conditions now using the Wunderground API.  This is designed to compliment the [MMM-3Day-Forecast](https://github.com/nigel-daniels/MMM-3Day-Forecast) module.<br>  
 **Note:** The Weather company has ceased the free API that this module was based on, as a result this is now based on the API offered by [BitWeather](https://www.weatherbit.io). If you are updating to this version then please don't forget to update your config too!
