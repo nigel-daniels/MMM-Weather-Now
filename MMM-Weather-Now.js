@@ -44,6 +44,7 @@ Module.register('MMM-Weather-Now', {
         return  {
 				da: 'translations/da.json',
                 en: 'translations/en.json',
+				es: 'translations/es.json',
 				nb:	'translations/nb.json'
                 };
         },
