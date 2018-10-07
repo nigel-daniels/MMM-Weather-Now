@@ -63,7 +63,7 @@ Module.register('MMM-Weather-Now', {
 		var C = '--';
 		var F = '--';
 		if (this.nowTemp !== '--') {
-			if (this.units = 'M') {
+			if (this.units === 'M') {
 				C = this.nowTemp;
 				F = Math.round( (((C*9)/5)+32) * 10 ) / 10;
 			} else {
