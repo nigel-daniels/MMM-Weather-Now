@@ -32,9 +32,9 @@ module.exports = NodeHelper.create({
             // Check to see if we are error free and got an OK response
             if (!error && response.statusCode == 200) {
                 // Let's get the weather data for right now
-                that.nowIcon = result.data[0].weather.icon;
-                that.nowWeather = result.data[0].weather.description;
-                that.nowTemp = result.data[0].app_temp;
+                that.nowIcon = result.weather[0].icon;
+                that.nowWeather = result.weather[0].description;
+                that.nowTemp = result.main.feels_like;
             } else {
                 // In all other cases it's some other error
                 that.nowIcon = 'blank';

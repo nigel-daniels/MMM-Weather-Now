@@ -22,9 +22,9 @@ Module.register('MMM-Weather-Now', {
         Log.log('Starting module: ' + this.name);
 
         // Set up the local values, here we construct the request url to use
-        this.units = this.config.units;
+        this.units = this.config.units==='I'?'imperial':'metric';
         this.loaded = false;
-        this.url = 'https://api.weatherbit.io/v2.0/current?key=' + this.config.api_key + '&lat=' + this.config.lat + '&lon=' + this.config.lon + '&units=' + this.config.units + '&lang=' + this.config.lang;
+        this.url = 'https://api.openweathermap.org/data/2.5/weather?appid=' + this.config.api_key + '&lat=' + this.config.lat + '&lon=' + this.config.lon + '&units=' + this.units + '&lang=' + this.config.lang;
         this.nowIcon = '';
         this.nowWeather = '';
         this.nowTemp = '';
@@ -64,7 +64,7 @@ Module.register('MMM-Weather-Now', {
 		var C = '--';
 		var F = '--';
 		if (this.nowTemp !== '--') {
-			if (this.units === 'M') {
+			if (this.units === 'metric') {
 				C = this.nowTemp;
 				F = Math.round( (((C*9)/5)+32) * 10 ) / 10;
 			} else {
@@ -107,7 +107,7 @@ Module.register('MMM-Weather-Now', {
 				nowTempDegCell = document.createElement('td');
 				nowTempDegCell.className = 'nowTempDeg2';
 
-				if (this.units === 'M') {
+				if (this.units === 'metric') {
 					nowTempDegCell.innerHTML = C + '&deg; C';
 				} else {
 					nowTempDegCell.innerHTML = F + '&deg; F';
@@ -149,7 +149,7 @@ Module.register('MMM-Weather-Now', {
 
 	            nowTempDiv = document.createElement('div');
 	            nowTempDiv.className = 'nowTemp bright';
-	            if (this.units === 'M') {
+	            if (this.units === 'metric') {
 					nowTempDiv.innerHTML = this.translate('FEELS_LIKE') + ' ' + C + '&deg; C (' + F + '&deg; F)';
 	            } else {
 	                nowTempDiv.innerHTML = this.translate('FEELS_LIKE') + ' ' + F + '&deg; F (' + C + '&deg; C)';
