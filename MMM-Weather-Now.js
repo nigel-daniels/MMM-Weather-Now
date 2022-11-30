@@ -66,10 +66,8 @@ Module.register('MMM-Weather-Now', {
 		if (this.nowTemp !== '--') {
 			if (this.units === 'metric') {
 				C = this.nowTemp;
-				F = ((((C*9)/5)+32) * 10 ) / 10;
 			} else {
 				F = this.nowTemp;
-				C = ( (((F-32)*5)/9) * 10 ) / 10;
 				}
 			}
 
@@ -150,9 +148,9 @@ Module.register('MMM-Weather-Now', {
 	            nowTempDiv = document.createElement('div');
 	            nowTempDiv.className = 'nowTemp bright';
 	            if (this.units === 'metric') {
-					nowTempDiv.innerHTML = this.translate('FEELS_LIKE') + ' ' + Math.round(C) + '&deg; C (' + Math.round(F) + '&deg; F)';
+					nowTempDiv.innerHTML = this.translate('FEELS_LIKE') + ' ' + Math.round(C) + '&deg; C';
 	            } else {
-	                nowTempDiv.innerHTML = this.translate('FEELS_LIKE') + ' ' + Math.round(F) + '&deg; F (' + Math.round(C) + '&deg; C)';
+	                nowTempDiv.innerHTML = this.translate('FEELS_LIKE') + ' ' + Math.round(F) + '&deg; F';
 	                }
 
 	            // Add elements to the nowDetail div
