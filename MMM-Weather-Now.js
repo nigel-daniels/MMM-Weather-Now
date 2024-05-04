@@ -24,7 +24,7 @@ Module.register('MMM-Weather-Now', {
         // Set up the local values, here we construct the request url to use
         this.units = this.config.units==='I'?'imperial':'metric';
         this.loaded = false;
-        this.url = 'https://api.openweathermap.org/data/3.0/weather?appid=' + this.config.api_key + '&lat=' + this.config.lat + '&lon=' + this.config.lon + '&units=' + this.units + '&lang=' + this.config.lang;
+        this.url = 'https://api.openweathermap.org/data/2.5/weather?appid=' + this.config.api_key + '&lat=' + this.config.lat + '&lon=' + this.config.lon + '&units=' + this.units + '&lang=' + this.config.lang;
         this.nowIcon = '';
         this.nowWeather = '';
         this.nowTemp = '';
