@@ -15,8 +15,10 @@ module.exports = NodeHelper.create({
 
         // Set up the local values
         this.nowIcon = '';
+		this.isDay = 1;
         this.nowWeather = '';
-        this.nowTemp = '';
+        this.nowC = '';
+		this.nowF = '';
         },
 
 
@@ -32,20 +34,30 @@ module.exports = NodeHelper.create({
             // Check to see if we are error free and got an OK response
             if (!error && response.statusCode == 200) {
                 // Let's get the weather data for right now
-                that.nowIcon = result.weather[0].icon;
-                that.nowWeather = result.weather[0].description;
-                that.nowTemp = result.main.feels_like;
+                that.nowIcon = result.current.condition.code;
+				that.isDay = result.current.is_day;
+                that.nowWeather = result.current.condition.text;
+                that.nowC = result.current.feelslike_c;
+				that.nowF = result.current.feelslike_f;
             } else {
                 // In all other cases it's some other error
-                that.nowIcon = 'blank';
+                that.nowIcon = '0000';
                 that.nowWeather = 'Error getting data';
-                that.nowTemp = '--';
-                }
+                that.nowC = '--';
+				that.nowF = '--';
+            }
 
             // We have the response figured out so lets fire off the notifiction
-            that.sendSocketNotification('GOT-WEATHER-NOW', {'url': that.url, 'nowIcon': that.nowIcon, 'nowWeather': that.nowWeather, 'nowTemp': that.nowTemp});
-            });
-        },
+            that.sendSocketNotification('GOT-WEATHER-NOW', {
+				'url': that.url,
+				'nowIcon': that.nowIcon,
+				'isDay': that.isDay,
+				'nowWeather': that.nowWeather,
+				'nowC': that.nowC,
+				'nowF': that.nowF
+			});
+        });
+    },
 
 
     socketNotificationReceived: function(notification, payload) {

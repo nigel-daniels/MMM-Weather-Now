@@ -22,12 +22,15 @@ Module.register('MMM-Weather-Now', {
         Log.log('Starting module: ' + this.name);
 
         // Set up the local values, here we construct the request url to use
-        this.units = this.config.units==='I'?'imperial':'metric';
+        //this.units = this.config.units==='I'?'imperial':'metric';
         this.loaded = false;
-        this.url = 'https://api.openweathermap.org/data/2.5/weather?appid=' + this.config.api_key + '&lat=' + this.config.lat + '&lon=' + this.config.lon + '&units=' + this.units + '&lang=' + this.config.lang;
+		this.units = this.config.units;
+		this.url = 'http://api.weatherapi.com/v1/current.json?q=' + this.config.lat + ',' + this.config.lon + '&lang=' + this.config.lang + '&key=' + this.config.api_key;
         this.nowIcon = '';
-        this.nowWeather = '';
-        this.nowTemp = '';
+		this.isDay = 1;
+		this.nowWeather = '';
+        this.nowC = 0.0;
+		this.nowF = 0.0;
 		this.tableView = this.config.tableView;
 
         // Trigger the first request
@@ -54,6 +57,7 @@ Module.register('MMM-Weather-Now', {
     getWeatherData: function(_this) {
         // Make the initial request to the helper then set up the timer to perform the updates
         _this.sendSocketNotification('GET-WEATHER-NOW', _this.url);
+
         setTimeout(_this.getWeatherData, _this.config.interval, _this);
         },
 
@@ -61,17 +65,6 @@ Module.register('MMM-Weather-Now', {
     getDom: function() {
         // Set up the local wrapper
         var wrapper = null;
-		var C = '--';
-		var F = '--';
-		if (this.nowTemp !== '--') {
-			if (this.units === 'metric') {
-				C = this.nowTemp;
-				F = ((((C*9)/5)+32) * 10 ) / 10;
-			} else {
-				F = this.nowTemp;
-				C = ( (((F-32)*5)/9) * 10 ) / 10;
-				}
-			}
 
         // If we have some data to display then build the results table
         if (this.loaded) {
@@ -86,7 +79,12 @@ Module.register('MMM-Weather-Now', {
 				nowIconCell.setAttribute('rowspan', '2');
 
 				nowIconImg = document.createElement('img');
-				nowIconImg.src = './modules/MMM-Weather-Now/images/' + this.nowIcon + '.gif';
+				if (this.isDay === 1) {
+					nowIconImg.src = './modules/MMM-Weather-Now/images/day/' + this.nowIcon + '.gif';
+				} else {
+					nowIconImg.src = './modules/MMM-Weather-Now/images/night/' + this.nowIcon + '.gif';
+				}
+
 
 				nowTitleCell = document.createElement('td');
 				nowTitleCell.className = 'nowTitle2 bright';
@@ -107,11 +105,11 @@ Module.register('MMM-Weather-Now', {
 				nowTempDegCell = document.createElement('td');
 				nowTempDegCell.className = 'nowTempDeg2';
 
-				if (this.units === 'metric') {
-					nowTempDegCell.innerHTML = Math.round(C) + '&deg; C';
+				if (this.units === 'M') {
+					nowTempDegCell.innerHTML = Math.round(this.nowC) + '&deg; C';
 				} else {
-					nowTempDegCell.innerHTML = Math.round(F) + '&deg; F';
-					}
+					nowTempDegCell.innerHTML = Math.round(this.nowF) + '&deg; F';
+				}
 
 				nowIconCell.appendChild(nowIconImg);
 
@@ -133,7 +131,11 @@ Module.register('MMM-Weather-Now', {
 	            // Elements to add to the wrapper
 	            nowIconImg = document.createElement('img');
 	            nowIconImg.className = 'nowIcon';
-	            nowIconImg.src = './modules/MMM-Weather-Now/images/' + this.nowIcon + '.gif';
+				if (this.isDay === 1) {
+					nowIconImg.src = './modules/MMM-Weather-Now/images/day/' + this.nowIcon + '.gif';
+				} else {
+					nowIconImg.src = './modules/MMM-Weather-Now/images/night/' + this.nowIcon + '.gif';
+				}
 
 	            nowDetailDiv = document.createElement('div');
 	            nowDetailDiv.className = 'nowDetail';
@@ -149,10 +151,10 @@ Module.register('MMM-Weather-Now', {
 
 	            nowTempDiv = document.createElement('div');
 	            nowTempDiv.className = 'nowTemp bright';
-	            if (this.units === 'metric') {
-					nowTempDiv.innerHTML = this.translate('FEELS_LIKE') + ' ' + Math.round(C) + '&deg; C (' + Math.round(F) + '&deg; F)';
+	            if (this.units === 'M') {
+					nowTempDiv.innerHTML = this.translate('FEELS_LIKE') + ' ' + Math.round(this.nowC) + '&deg; C (' + Math.round(this.nowF) + '&deg; F)';
 	            } else {
-	                nowTempDiv.innerHTML = this.translate('FEELS_LIKE') + ' ' + Math.round(F) + '&deg; F (' + Math.round(C) + '&deg; C)';
+	                nowTempDiv.innerHTML = this.translate('FEELS_LIKE') + ' ' + Math.round(this.nowF) + '&deg; F (' + Math.round(this.nowC) + '&deg; C)';
 	                }
 
 	            // Add elements to the nowDetail div
@@ -180,8 +182,10 @@ Module.register('MMM-Weather-Now', {
                 // we got some data so set the flag, stash the data to display then request the dom update
                 this.loaded = true;
                 this.nowIcon = payload.nowIcon;
+				this.isDay = payload.isDay;
                 this.nowWeather = payload.nowWeather;
-                this.nowTemp = payload.nowTemp;
+                this.nowC = payload.nowC;
+				this.nowF = payload.nowF;
                 this.updateDom(1000);
             }
         }
