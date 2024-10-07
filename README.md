@@ -21,7 +21,7 @@ The entry in `config.js` can include the following options:
 |`tableView`|This switches the look to use a more compact table based view.<br><br>**Type** `boolean`<br>**Default value** `false`|
 |`interval`|How often the weather is updated.<br><br>**Type:** `integer`<br>**Default value:** `900000 // 15 minutes`|
 
-\* This module itself only currently supports `da`, `en`, `es`, `it` and `nb` for the text 'Now' and 'Feels like', thanks for the contributions!  If you have translations for these please send them over and I'll add your language to the set I can support :)
+\* This module itself only currently supports `da`, `en`, `es`, `it` , `de` and `nb` for the text 'Now' and 'Feels like', thanks for the contributions!  If you have translations for these please send them over and I'll add your language to the set I can support :)
 
 Here is an example of an entry in `config.js`
 ```
