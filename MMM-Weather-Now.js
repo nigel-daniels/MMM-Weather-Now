@@ -8,13 +8,14 @@
 Module.register('MMM-Weather-Now', {
 
     defaults: {
-            api_key:    '',
-            lat:        0.0,
-            lon:        0.0,
-            units:      'M',
-            lang:       'en',
-            interval:   900000, // Every 15 mins
-            tableView:  false
+            api_key:        '',
+            lat:            0.0,
+            lon:            0.0,
+            units:          'M',
+            doNotConvert:   true,
+            lang:           'en',
+            interval:       900000, // Every 15 mins
+            tableView:      false
         },
 
 
@@ -152,10 +153,19 @@ Module.register('MMM-Weather-Now', {
 
                 nowTempDiv = document.createElement('div');
                 nowTempDiv.className = 'nowTemp bright';
-                if (this.units === 'M') {
-                    nowTempDiv.innerHTML = this.translate('FEELS_LIKE') + ' ' + Math.round(this.nowC) + '&deg; C (' + Math.round(this.nowF) + '&deg; F)';
-                } else {
-                    nowTempDiv.innerHTML = this.translate('FEELS_LIKE') + ' ' + Math.round(this.nowF) + '&deg; F (' + Math.round(this.nowC) + '&deg; C)';
+
+                if (this.config.doNotConvert){
+                    if (this.units === 'M') {
+                        nowTempDiv.innerHTML = this.translate('FEELS_LIKE') + ' ' + Math.round(this.nowC) + '&deg; C (' + Math.round(this.nowF) + '&deg; F)';
+                    } else {
+                        nowTempDiv.innerHTML = this.translate('FEELS_LIKE') + ' ' + Math.round(this.nowF) + '&deg; F (' + Math.round(this.nowC) + '&deg; C)';
+                    }
+                }else{
+                    if (this.units === 'M') {
+                        nowTempDiv.innerHTML = this.translate('FEELS_LIKE') + ' ' + Math.round(this.nowC) + '&deg; C';
+                    } else {
+                        nowTempDiv.innerHTML = this.translate('FEELS_LIKE') + ' ' + Math.round(this.nowF) + '&deg; F';
+                    }
                 }
 
                 // Add elements to the nowDetail div
